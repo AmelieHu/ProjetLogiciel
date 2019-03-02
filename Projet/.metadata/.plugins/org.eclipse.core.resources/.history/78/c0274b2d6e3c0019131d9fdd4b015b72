@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Main {
+
+	public static void main(String[] args){
+		
+		//Matrice.test();
+		
+		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
+		List<int[][]> image = MnistReader.getImages("train-images.idx3-ubyte");
+		 // System.out.println(image.size());
+		
+		int imax = 1000;
+		int N = 2000;
+		List<int[][]> imageReduit = new ArrayList<int[][]>();
+		int[] labelsReduit = new int[N];
+		for (int i=0; i<N; i++){
+			imageReduit.add(image.get(i));
+			labelsReduit[i]= labels[i];
+		}
+		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax);
+		essai.training();
+		
+		essai.statistics();
+		
+		//System.out.println("chiffre reconnue " + reconnu);
+		
+		
+		/*for (int i = 0; i < 28; i++) {
+			for (int j = 0; j < 28; j++) {
+				System.out.print(image.get(20000)[i][j] + " ");				
+			}
+			System.out.println();
+		}
+		System.out.println(labels[20000]);*/
+		
+		
+	}
+}

@@ -1,0 +1,5 @@
+
+public class Util {
+	static int nbPixel = 28;
+	static int numberDigit = 10;
+}

@@ -1,0 +1,15 @@
+import java.util.List;
+
+
+public class Main {
+
+	public static void main(String[] args){
+		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
+		List<int[][]> image = MnistReader.getImages("train-images.idx3-ubyte");
+		System.out.println(image.size());
+		for (int i = 0; i < image.size(); i++) {
+			MnistReader.renderImage(image.get(i));
+		}
+		
+	}
+}

@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+org.eclipse.jdt.core.codeComplete.visibilityCheck=enabled
+org.eclipse.jdt.core.userLibrary.opencv=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/li/Documents/opencv-4.0.1/build/bin/opencv-401.jar">\n\t\t<attributes>\n\t\t\t<attribute name\="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value\="/home/li/Documents/opencv-4.0.1"/>\n\t\t</attributes>\n\t</archive>\n</userlibrary>\n

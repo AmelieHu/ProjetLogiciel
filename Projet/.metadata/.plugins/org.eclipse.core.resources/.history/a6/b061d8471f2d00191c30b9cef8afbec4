@@ -1,0 +1,51 @@
+import java.util.List;
+
+
+public class Kmeans {
+	private int k=10;
+	private int nbitmax=30;
+	private List<Matrice> image;
+	private int N= image.size();
+	private int[] labels; 
+	
+	private List<int[][]> center ;
+	private int[] centerLabels = new int[10];
+	private int[][] classes = new int[10][];
+	
+	
+	
+	public Kmeans(List<int[][]> image,int [] labels) {
+		Matrice mat;
+		for (int i = 0; i< image.size(); i++){
+			mat = new Matrice(image.get(i));
+			this.image.get(i) = mat; 
+		}
+		this.labels = labels;
+
+	}
+	
+	
+
+	
+	public void main (String[] arg){
+		int indice;
+		for (int i = 0; i < k; i++){
+			indice = (int) (Math.random()*N +1);
+			center.add(image.get((indice)));
+			centerLabels[i] = labels[indice];
+			
+		}
+		for (int[][] matrice : image){
+			int min=0;
+			int dmin;
+			for (int[][] centre: center){
+				Matrice x = minus(matrice, centre);
+				
+			}
+			
+			
+		}
+		
+	}
+ 
+}

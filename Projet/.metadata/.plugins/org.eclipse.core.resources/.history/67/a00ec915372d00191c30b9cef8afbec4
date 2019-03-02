@@ -1,0 +1,81 @@
+import java.util.List;
+
+
+public class Kmeans {
+	private static int k=10;
+	private int nbitmax=30;
+	int nbPixel = 28; 
+	private static List<int[][]> image;
+	private int N;;
+	private static int[] labels; 
+
+	private static List<int[][]> center ;
+	private static int[] centerLabels = new int[k];
+	private static int[][] classes = new int[10][];
+	private static int[] indicesClasses = new int[k];
+
+
+
+	public Kmeans(List<int[][]> image,int [] labels) {
+		this.image = image;	
+		this.labels = labels;
+		N=image.size();
+		for (int i=0 ;i<k ; i++){
+			indicesClasses[i] = 0;
+		}
+	}
+
+
+
+	// Training : creation des classes de chiffres à partir de la base de données 
+
+	public void main (String[] arg){
+		int indice;
+		for (int i = 0; i < k; i++){
+			indice = (int) (Math.random()*N +1);
+			center.set(i,image.get((indice)));
+			centerLabels[i] = labels[indice];
+		}
+		for (int[][] matrice: image){
+			int min=0;
+			double dmin = Matrice.frobeniusNorm(Matrice.minus(matrice, center.get(0)));
+			for (int[][] centre: center){
+				int[][] x = Matrice.minus(matrice, centre);
+				double dx = Matrice.frobeniusNorm(x);
+				if (dx<dmin){
+					dmin = dx;
+					min = center.indexOf(centre);
+				}
+			}
+			classes[min][indicesClasses[min]] = image.indexOf(matrice);
+			indicesClasses[min]++; 
+		}
+		for (int i=0; i<k; i++){
+			int[][] somme= new int[nbPixel][nbPixel]; 
+			for(int j =0; j< indicesClasses[i]; j++){
+				somme =  Matrice.plus(somme, image.get(classes[i][j]));
+			}
+
+			center.set(i, Matrice.normalize(somme, indicesClasses[i]));
+		}
+
+	}
+
+	public static int reconnaissance(int[][] chiffre){
+		System.out.println(center);
+		int min=0;
+		double dmin = Matrice.frobeniusNorm(Matrice.minus(chiffre, center.get(0)));
+		for (int[][] centre: center){
+			int[][] x =Matrice.minus(chiffre, centre);
+			double dx = Matrice.frobeniusNorm(x);
+			if (dx<dmin){
+				dmin = dx;
+				min = center.indexOf(centre);
+			}
+		}
+		return centerLabels[min];
+	}
+}
+
+
+

@@ -1,0 +1,11 @@
+import java.util.List;
+
+
+public class Main {
+
+	public static void main(String[] args){
+		int[] labels = MnistReader.getLabels("train-labels");
+		List<int[][]> image = MnistReader.getImages("train-images");
+		
+	}
+}

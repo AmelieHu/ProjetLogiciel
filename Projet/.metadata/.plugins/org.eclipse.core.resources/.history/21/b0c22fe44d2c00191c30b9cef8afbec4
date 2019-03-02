@@ -1,0 +1,23 @@
+import java.util.List;
+
+public class Kmeans {
+	private int k=10;
+	private int N=60000;
+	private int nbitmax=30;
+	private List<int[][]> image;
+	private int[] labels; 
+	
+	private List<int[][]> center;
+	private int[] centerLabel;
+	
+	
+	public Kmeans(List<int[][]> image,int [] labels) {
+		this.image = image;
+		this.labels = labels;
+
+	}
+	
+	
+	
+
+}
