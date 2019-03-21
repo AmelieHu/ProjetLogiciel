@@ -11,7 +11,6 @@ public class Matrice {
 				ms[i][j] = m1[i][j]- m2[i][j]; } 
 
 		}
-
 		return ms;
 	}
 
@@ -26,8 +25,6 @@ public class Matrice {
 
 		}
 		return S;
-
-
 	}
 
 	public static int[][] plus(int[][]m1,int[][] m2 ) {
@@ -70,5 +67,33 @@ public class Matrice {
 
 		System.out.println(frobeniusNorm(m));
 	}
-
-}
+	
+	public static int[][] transpose(int[][] M){
+		int[][] Mt = new int [M.length][M[0].length];
+		for (int i = 0; i < M.length; i++) {
+			for (int j = 0; j < M[0].length; j++) {
+				Mt[i][j] = M[j][i]; 
+			}
+		}
+		return Mt;
+	}
+	
+	public static int[][] multiplication(int[][] m1, int[][] m2){
+		int l= m1.length;
+		int c = m1[0].length;
+		int[][] produit = new int[l][c];
+		for (int row =0; row <l;row++){
+			for (int col =0; col<c;col ++){
+				for(int i = 0; i < m1.length; i++)
+				produit[row][col]+= m1[row][i] *m2[i][col];
+						}
+		}
+		return produit; 
+	}
+	
+	public static void merde(){
+		int[][] m1 = new int[][]{new int[]{1, 0}, new int[]{0, 1}};
+		int[][] m2 = new int[][]{new int[]{4, 3}, new int[]{1, 9}};
+		System.out.println(multiplication(m1, m2)[0][0] + multiplication(m1, m2)[0][1] + multiplication(m1, m2)[1][0] + multiplication(m1, m2)[1][1]);
+	}
+ }

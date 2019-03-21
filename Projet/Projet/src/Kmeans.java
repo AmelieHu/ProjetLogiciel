@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 public class Kmeans {
-	private int numberDigit = 10;
+	private int numberCluster;
 	int nbPixel = 28;
 	private List<int[][]> images;
 	private int N;;
@@ -20,7 +20,8 @@ public class Kmeans {
 	private int[] indicesClasses;
 
 
-	public Kmeans(List<int[][]> images, int[] labels, int imax) {
+	public Kmeans(List<int[][]> images, int[] labels, int imax, int numberCluster) {
+		this.numberCluster = numberCluster; 
 		this.images = images;
 		this.labels = labels;
 		this.imax = imax;
@@ -29,15 +30,15 @@ public class Kmeans {
 		
 		center = new ArrayList<int[][]>();
 		lastCenter = new ArrayList<int[][]>();
-		centerLabels = new int[numberDigit];
-		indicesClasses = new int[numberDigit];
-		classes = new ArrayList<ArrayList<Integer>>(10);
+		centerLabels = new int[numberCluster];
+		indicesClasses = new int[numberCluster];
+		classes = new ArrayList<ArrayList<Integer>>(numberCluster);
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < numberCluster; i++) {
 			classes.add(new ArrayList<Integer>());
 		}
 
-		for (int i = 0; i < numberDigit; i++) {
+		for (int i = 0; i < numberCluster; i++) {
 			indicesClasses[i] = 0;
 		}
 	}
@@ -46,7 +47,7 @@ public class Kmeans {
 	public void initialize(){
 		int indice;
 
-		for (int i = 0; i < numberDigit; i++) {
+		for (int i = 0; i < numberCluster; i++) {
 			indice = (int) (Math.random() * N ) ;
 			center.add(images.get((indice)));
 			lastCenter.addAll(center);
@@ -74,7 +75,7 @@ public class Kmeans {
 	}
 
 	public void calculateCenter(){
-		for (int i = 0; i < numberDigit; i++) {
+		for (int i = 0; i < numberCluster; i++) {
 			int[][] somme = new int[nbPixel][nbPixel];
 			for (int j = 0; j < indicesClasses[i]; j++) {
 				somme = Matrice.plus(somme,
@@ -106,7 +107,7 @@ public class Kmeans {
 
 			classes.clear();
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < numberCluster; i++) {
 				classes.add(new ArrayList<Integer>());
 			}
 			
@@ -117,7 +118,7 @@ public class Kmeans {
 
 			this.calculateCenter();
 			
-			for (int i=0 ; i<numberDigit ; i++){
+			for (int i=0 ; i<numberCluster ; i++){
 				int[][] x = Matrice.minus(lastCenter.get(i), center.get(i));
 				double dx = Matrice.frobeniusNorm(x);
 				if (dx > distanceMax) {
@@ -131,13 +132,16 @@ public class Kmeans {
 	}
 
 	public void statistics() {
+		//On calcule les statistiques selon chaque groupe
 		for (int i = 0; i < classes.size(); i++) {
-			float[] stats = new float[numberDigit];
+			float[] stats = new float[numberCluster];
 
+			//Calcul du vecteur de statistique
 			for (int j = 0; j < classes.get(i).size(); j++) {
 				stats[labels[classes.get(i).get(j)]] += 1 ;/// (float)classes.get(i).size();
 			}
 
+			//Affichage
 			System.out.print("[");
 			for (int j = 0; j < stats.length; j++) {
 				System.out.print(stats[j] + ", ");
@@ -149,6 +153,56 @@ public class Kmeans {
 					max = j;
 			}
 			System.out.println("] " + max);
+			printCenter(i);
+			centerLabels[i] = max;
 		}
+	}
+	
+	public void printCenter(int h){
+		for (int i = 0; i < nbPixel; i++) {
+			for (int j = 0; j < nbPixel; j++) {
+				if(center.get(h)[i][j] > 50){
+					System.out.print(center.get(h)[i][j]);
+					for (int j2 = 0; j2 < (4 - String.valueOf(center.get(h)[i][j]).length()); j2++) {
+						System.out.print(" ");
+					}
+				}else{
+					System.out.print("0   ");
+
+				}
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	public int reconnaissance(int[][] testeur){
+		int min = 0;
+		double dmin = Matrice.frobeniusNorm(Matrice.minus(testeur, center.get(0)));
+		for (int[][] centre : center) {
+			int[][] x = Matrice.minus(testeur, centre);
+			double dx = Matrice.frobeniusNorm(x);
+			if (dx < dmin) {
+				dmin = dx;
+				min = center.indexOf(centre);
+			}
+		}
+		return centerLabels[min];
+	}
+	
+	public int[][] getW(){
+		int[][] W = new int[nbPixel][nbPixel];
+		int[][] M = new int[nbPixel][nbPixel];
+		for (int i = 0; i < numberCluster; i++) {
+			int[][] mean = new int[nbPixel][nbPixel];
+			mean = center.get(i);
+			for (int j = 0; j < indicesClasses[i]; j++) {
+				int[][] element = new int[nbPixel][nbPixel];
+				element = images.get(classes.get(i).get(j)); 
+			M =  Matrice.multiplication(Matrice.minus(element, mean),Matrice.transpose(Matrice.minus(element, mean))) ;
+			W=Matrice.plus(M, W);
+			}
+			}
+		return W;
 	}
 }

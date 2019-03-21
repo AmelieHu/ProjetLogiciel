@@ -1,0 +1,83 @@
+import java.util.ArrayList;
+
+
+public class Matrice {
+
+	public static int[][] minus(int[][]m1,int[][] m2 ) {
+		int[][] ms = new int[m1.length][m1[0].length ];
+		for ( int i = 0 ; i < m1.length ; i++ ) {
+			for ( int j = 0 ; j < m1[0].length ; j++ ) {
+
+				ms[i][j] = m1[i][j]- m2[i][j]; } 
+
+		}
+
+		return ms;
+	}
+
+
+	public static double frobeniusNorm (int[][] A){
+		double S = 0;
+		for ( int i = 0 ; i < A.length ; i++ ) {
+			for ( int j = 0 ; j < A[0].length ; j++ ) {
+				S= S + Math.pow(A[i][j],2);
+
+			}
+
+		}
+		return S;
+
+
+	}
+
+	public static int[][] plus(int[][]m1,int[][] m2 ) {
+		int[][] ms = new int[m1.length][m1[0].length ];
+		for ( int i = 0 ; i < m1.length ; i++ ) {
+			for ( int j = 0 ; j < m1[0].length ; j++ ) {
+
+				ms[i][j] = m1[i][j] + m2[i][j]; } 
+
+		}
+
+		return ms;
+	}
+
+
+
+	public static int[][] normalize(int[][] A , int N){
+		if (N != 0){
+
+			for ( int i = 0 ; i < A.length ; i++ ) {
+				for ( int j = 0 ; j < A[0].length ; j++ ) {
+					A[i][j] = A[i][j]/N;
+				}
+			}
+		}
+		return A;
+	}
+
+	public static void test(){
+		int[][] A = {{0, 0}, {0, 0}};
+		int[][] B = {{0, 0}, {0, 0}};
+
+		int[][] m = minus(A, B);
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				System.out.print(m[i][j] + " ");				
+			}
+			System.out.println();
+		}
+
+		System.out.println(frobeniusNorm(m));
+	}
+	
+	public int[][] transpose(int[][] M){
+		int[][] Mt = new int [M.length][M[0].length];
+		for (int i = 0; i < M.length; i++) {
+			for (int j = 0; j < M[0].length; j++) {
+				Mt[i][j] = M[j][i]; 
+			}
+		}
+		return Mt;
+	}
+}

@@ -5,14 +5,25 @@ import java.util.List;
 public class Main {
 
 	public static void main(String[] args){
-
-		//Matrice.test();
+		/*
+		//Matrice.training();
 
 		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
 		List<int[][]> image = MnistReader.getImages("train-images.idx3-ubyte");
+		
+	
+		//Matrice.test(); 
+		
+		int[] labelsTest = MnistReader.getLabels("t10k-labels.idx1-ubyte");
+		List<int[][]> imageTest = MnistReader.getImages("t10k-images.idx3-ubyte");
+		int nbTesteur = 20;
+		
+		
+		
 		// System.out.println(image.size());
 
 		double epsilon = 5;
+		int numberCluster = 30;
 		int imax = 10;
 		int N = 20000;
 		List<int[][]> imageReduit = new ArrayList<int[][]>();
@@ -21,27 +32,18 @@ public class Main {
 			imageReduit.add(image.get(i));
 			labelsReduit[i]= labels[i];
 		}
-		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax);
+		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax, numberDigit);
 		essai.training(epsilon);
 
 		essai.statistics();
 
-		for (int h = 0; h < 10; h++) {
-			for (int i = 0; i < 28; i++) {
-				for (int j = 0; j < 28; j++) {
-					if(essai.center.get(h)[i][j] > 50){
-						System.out.print(essai.center.get(h)[i][j]);
-						for (int j2 = 0; j2 < (4 - String.valueOf(essai.center.get(h)[i][j]).length()); j2++) {
-							System.out.print(" ");
-						}
-					}else{
-						System.out.print("0   ");
-
-					}
-				}
-				System.out.println();
-			}
-			System.out.println();
-		}
+		for(int i=0; i< nbTesteur; i++ ){
+			int nbReconnu = essai.reconnaissance(imageTest.get(i));
+			System.out.println("Nb reconnu " + nbReconnu + "et nb reel " + labelsTest[i]);
+			
+		}*/
+		
+		Matrice.merde();
+		
 	}
 }

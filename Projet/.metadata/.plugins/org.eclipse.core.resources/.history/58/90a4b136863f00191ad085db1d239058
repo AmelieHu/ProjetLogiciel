@@ -1,0 +1,48 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Main {
+
+	public static void main(String[] args){
+
+		//Matrice.test();
+
+		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
+		List<int[][]> image = MnistReader.getImages("train-images.idx3-ubyte");
+		// System.out.println(image.size());
+
+		double epsilon = 5;
+		int numberDigit = 20;
+		int imax = 10;
+		int N = 20000;
+		List<int[][]> imageReduit = new ArrayList<int[][]>();
+		int[] labelsReduit = new int[N];
+		for (int i=0; i<N; i++){
+			imageReduit.add(image.get(i));
+			labelsReduit[i]= labels[i];
+		}
+		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax, numberDigit);
+		essai.training(epsilon);
+
+		essai.statistics();
+
+		for (int h = 0; h < numberDigit; h++) {
+			for (int i = 0; i < 28; i++) {
+				for (int j = 0; j < 28; j++) {
+					if(essai.center.get(h)[i][j] > 50){
+						System.out.print(essai.center.get(h)[i][j]);
+						for (int j2 = 0; j2 < (4 - String.valueOf(essai.center.get(h)[i][j]).length()); j2++) {
+							System.out.print(" ");
+						}
+					}else{
+						System.out.print("0   ");
+
+					}
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+	}
+}
