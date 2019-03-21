@@ -5,7 +5,7 @@ import java.util.List;
 public class Main {
 
 	public static void main(String[] args){
-		/*
+		
 		//Matrice.training();
 
 		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
@@ -17,22 +17,20 @@ public class Main {
 		int[] labelsTest = MnistReader.getLabels("t10k-labels.idx1-ubyte");
 		List<int[][]> imageTest = MnistReader.getImages("t10k-images.idx3-ubyte");
 		int nbTesteur = 20;
-		
-		
-		
-		// System.out.println(image.size());
 
 		double epsilon = 5;
-		int numberCluster = 30;
+		int numberCluster = 40;
 		int imax = 10;
-		int N = 20000;
+		int N = 1000;
+		int nbPixel = 28;
+		
 		List<int[][]> imageReduit = new ArrayList<int[][]>();
 		int[] labelsReduit = new int[N];
 		for (int i=0; i<N; i++){
 			imageReduit.add(image.get(i));
 			labelsReduit[i]= labels[i];
 		}
-		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax, numberDigit);
+		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax, numberCluster);
 		essai.training(epsilon);
 
 		essai.statistics();
@@ -41,9 +39,9 @@ public class Main {
 			int nbReconnu = essai.reconnaissance(imageTest.get(i));
 			System.out.println("Nb reconnu " + nbReconnu + "et nb reel " + labelsTest[i]);
 			
-		}*/
+		}
 		
-		Matrice.merde();
+		System.out.println(essai.ch());
 		
 	}
 }

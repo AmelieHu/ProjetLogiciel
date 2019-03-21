@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Matrice {
@@ -89,6 +90,35 @@ public class Matrice {
 						}
 		}
 		return produit; 
+	}
+	
+	public static int[][] mean(List<int[][]> list){
+		int[][] mean = new int[28][28];
+		for (int i = 0; i < list.size(); i++) {
+			mean = plus(list.get(i), mean);
+		}
+		
+		return normalize(mean, list.size());
+	}
+	
+	public static int[][] scalarMultiplication(int scalar, int[][] M){
+		
+		int[][] res = new int[28][28];
+		for (int i = 0; i < M.length; i++) {
+			for (int j = 0; j < M[0].length; j++) {
+				res[i][j] = M[i][j] * scalar;
+			}
+		}
+		
+		return res;
+	}
+	
+	public static int trace(int[][] M){
+		int tr = 0;
+		for (int i = 0; i < M.length; i++) {
+			tr += M[i][i];
+		}
+		return tr;
 	}
 	
 	public static void merde(){

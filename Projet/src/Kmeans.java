@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class Kmeans {
 	private int numberCluster;
-	int nbPixel = 28;
+	public int nbPixel = 28;
 	private List<int[][]> images;
 	private int N;;
 	private static int[] labels;
@@ -204,5 +204,22 @@ public class Kmeans {
 			}
 			}
 		return W;
+	}
+	
+	public int[][] getB(){
+		int[][] B = new int[nbPixel][nbPixel];
+		int[][] M = Matrice.mean(center);
+		for (int i = 0; i < numberCluster; i++) {
+			int[][] X = Matrice.minus(center.get(i), M);
+			
+			B = Matrice.plus(B, Matrice.scalarMultiplication(indicesClasses[i], Matrice.multiplication(X, Matrice.transpose(X))));
+		}
+		
+		return B;
+	}
+	
+	public int ch() {
+		int n = images.size();
+		return Matrice.trace(getB()) * (n - numberCluster) / (Matrice.trace(getW()) * (numberCluster - 1));
 	}
 }
