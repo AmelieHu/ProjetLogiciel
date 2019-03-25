@@ -6,42 +6,36 @@ public class Main {
 
 	public static void main(String[] args){
 		
-		//Matrice.training();
-
+		int numberCluster = 30; //Nombre de cluster
+		int N = 10000;//Nombre d'image utilisée pour entrainer l'algorithme
+		
+		
+		//initialisation des matrices d'images et de labels
 		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
-		List<int[][]> image = MnistReader.getImages("train-images.idx3-ubyte");
+		List<int[][]> images = MnistReader.getImages("train-images.idx3-ubyte");
 		
-	
-		//Matrice.test(); 
+		//Initialisation des listes réduites des images
+		List<int[][]> imagesReduced = new ArrayList<int[][]>();
+		int[] labelsReduced = new int[N];
+		imagesReduced = Util.reduceList(images, N);
+		labelsReduced = Util.reducedVector(labels, N);
 		
-		int[] labelsTest = MnistReader.getLabels("t10k-labels.idx1-ubyte");
-		List<int[][]> imageTest = MnistReader.getImages("t10k-images.idx3-ubyte");
-		int nbTesteur = 20;
+		//Initialisation de l'algorithme avec les images
+		Kmeans essai = new Kmeans(numberCluster, images, labels);
+		
+		//Entrainement de l'algorithme
+		essai.train();
 
-		double epsilon = 5;
-		int numberCluster = 40;
-		int imax = 10;
-		int N = 1000;
-		int nbPixel = 28;
-		
-		List<int[][]> imageReduit = new ArrayList<int[][]>();
-		int[] labelsReduit = new int[N];
-		for (int i=0; i<N; i++){
-			imageReduit.add(image.get(i));
-			labelsReduit[i]= labels[i];
-		}
-		Kmeans essai = new Kmeans(imageReduit, labelsReduit, imax, numberCluster);
-		essai.training(epsilon);
-
+		//Affichage des statistiques de détection
 		essai.statistics();
 
-		for(int i=0; i< nbTesteur; i++ ){
-			int nbReconnu = essai.reconnaissance(imageTest.get(i));
-			System.out.println("Nb reconnu " + nbReconnu + "et nb reel " + labelsTest[i]);
-			
-		}
+		//Image à tester
+		List<int[][]> imageToTest = new ArrayList<int[][]>();
+		imageToTest = Util.reduceList(images, 10, N);
 		
-		System.out.println(essai.ch());
+		//Reconnaissance d'une liste de nombres manuscrits
+		essai.recognize(imageToTest);
 		
+		System.out.println(essai.getCH());
 	}
 }

@@ -7,11 +7,11 @@ import java.util.Vector;
 
 public class Kmeans {
 	private int numberCluster;
-	public int nbPixel = 28;
+	public int nbPixel;
+	
 	private List<int[][]> images;
-	private int N;;
-	private static int[] labels;
-	private int imax;
+	private int[] labels;
+	private int N;
 
 	private List<int[][]> lastCenter;
 	public List<int[][]> center;
@@ -20,20 +20,26 @@ public class Kmeans {
 	private int[] indicesClasses;
 
 
-	public Kmeans(List<int[][]> images, int[] labels, int imax, int numberCluster) {
-		this.numberCluster = numberCluster; 
+	public Kmeans(int numberCluster, List<int[][]> images, int[] labels) {
+		//Initialisation de la base de donnée
+		this.numberCluster = numberCluster;
 		this.images = images;
 		this.labels = labels;
-		this.imax = imax;
-
+		this.nbPixel = images.get(0).length;
 		N = images.size();
 		
+		//Création des clusters
 		center = new ArrayList<int[][]>();
 		lastCenter = new ArrayList<int[][]>();
+		
+		//Création de la liste contenant les chiffres détectés des clusters
 		centerLabels = new int[numberCluster];
+		//Nombre d'éléments par cluster
 		indicesClasses = new int[numberCluster];
+		//Indices des éléments appartenant au cluster
 		classes = new ArrayList<ArrayList<Integer>>(numberCluster);
 
+		//Initialisation des listes de classes et d'indicesClasses
 		for (int i = 0; i < numberCluster; i++) {
 			classes.add(new ArrayList<Integer>());
 		}
@@ -44,7 +50,10 @@ public class Kmeans {
 	}
 
 
-	public void initialize(){
+	/**
+	 * Initialise la première liste de centre avec des éléments pris au hasard dans la liste d'images
+	 */
+	public void initializeFirstCenter(){
 		int indice;
 
 		for (int i = 0; i < numberCluster; i++) {
@@ -54,7 +63,7 @@ public class Kmeans {
 		}
 	}
 
-	public void searchCenter(List<int[][]> images){
+	public void searchCenter(){
 		for (int[][] matrice : images) {
 			int min = 0;
 			double dmin = Matrice.frobeniusNorm(Matrice.minus(matrice,
@@ -68,7 +77,7 @@ public class Kmeans {
 					min = center.indexOf(centre);
 				}
 			}
-
+			
 			classes.get(min).add(images.indexOf(matrice));
 			indicesClasses[min]++;
 		}
@@ -77,27 +86,27 @@ public class Kmeans {
 	public void calculateCenter(){
 		for (int i = 0; i < numberCluster; i++) {
 			int[][] somme = new int[nbPixel][nbPixel];
+			
 			for (int j = 0; j < indicesClasses[i]; j++) {
 				somme = Matrice.plus(somme,
 						images.get(classes.get(i).get(j)));
 			}
 			
-			center.set(i, Matrice.normalize(somme, indicesClasses[i]));
+			center.set(i, Matrice.scalarDivision(somme, indicesClasses[i]));
 		}
 	}
 
-	// Training : creation des classes de chiffres Ã  partir de la base de
-	// donnÃ©es
-	public void training(double epsilon) {
+	
+	/**
+	 * Entraine le programme pour reconnaitre des nombres manuscrits
+	 */
+	public void train() {
+		//On initialise les premiers centres
+		this.initializeFirstCenter();
 
-		this.initialize();
-
-		//Calcul les centres pour un nombre d'itÃ©ration imax donnÃ©
-		//for (int it = 0; it < imax; it++) {
 		double distanceMax;
-		int nb = 0;
+		
 		do{
-			nb++;
 			distanceMax = 0;
 			
 			//initialise les indicesClasses
@@ -114,7 +123,7 @@ public class Kmeans {
 			lastCenter.clear();
 			lastCenter.addAll(center); 
 
-			this.searchCenter(images);
+			this.searchCenter();
 
 			this.calculateCenter();
 			
@@ -127,14 +136,46 @@ public class Kmeans {
 			}
 			System.out.println(distanceMax);
 			
-		} while(distanceMax > epsilon);
-		System.out.println(nb);
+		} while(distanceMax != 0);
 	}
 
+	/**
+	 * Affiche les statistiques liés aux clusters
+	 */
 	public void statistics() {
 		//On calcule les statistiques selon chaque groupe
 		for (int i = 0; i < classes.size(); i++) {
-			float[] stats = new float[numberCluster];
+			float[] stats = new float[10];
+
+			//Calcul du vecteur de statistique
+			for (int j = 0; j < classes.get(i).size(); j++) {
+				stats[labels[classes.get(i).get(j)]] += 1 ;/// (float)classes.get(i).size();
+			}
+
+			//Affichage
+			System.out.print("[");
+			for (int j = 0; j < stats.length; j++) {
+				System.out.print(stats[j] + ", ");
+			}
+
+			int max = 0;
+			for (int j = 1; j < stats.length; j++) {
+				if (stats[max] < stats[j])
+					max = j;
+			}
+			System.out.println("], nombre reconnu : " + max);
+			centerLabels[i] = max;
+		}
+	}
+	
+	/**
+	 * Affiche les statistiques liés aux clusters
+	 * @param centerPrinting : affiche la matrice des centres 
+	 */
+	public void statistics(boolean centerPrinting) {
+		//On calcule les statistiques selon chaque groupe
+		for (int i = 0; i < classes.size(); i++) {
+			float[] stats = new float[10];
 
 			//Calcul du vecteur de statistique
 			for (int j = 0; j < classes.get(i).size(); j++) {
@@ -153,11 +194,16 @@ public class Kmeans {
 					max = j;
 			}
 			System.out.println("] " + max);
-			printCenter(i);
+			if(centerPrinting)
+				printCenter(i);
 			centerLabels[i] = max;
 		}
 	}
 	
+	/**
+	 * Affiche le centre h dans la console
+	 * @param h : position du cluster
+	 */
 	public void printCenter(int h){
 		for (int i = 0; i < nbPixel; i++) {
 			for (int j = 0; j < nbPixel; j++) {
@@ -168,7 +214,6 @@ public class Kmeans {
 					}
 				}else{
 					System.out.print("0   ");
-
 				}
 			}
 			System.out.println();
@@ -176,6 +221,10 @@ public class Kmeans {
 		System.out.println();
 	}
 	
+	/**
+	 * @param testeur Matrice du nombre à tester
+	 * @return la valeur du nombre détectée correspondant à un cluster
+	 */
 	public int reconnaissance(int[][] testeur){
 		int min = 0;
 		double dmin = Matrice.frobeniusNorm(Matrice.minus(testeur, center.get(0)));
@@ -190,6 +239,9 @@ public class Kmeans {
 		return centerLabels[min];
 	}
 	
+	/**
+	 * @return la matrice W correspondant à la dispersion au sein des clusters
+	 */
 	public int[][] getW(){
 		int[][] W = new int[nbPixel][nbPixel];
 		int[][] M = new int[nbPixel][nbPixel];
@@ -206,6 +258,9 @@ public class Kmeans {
 		return W;
 	}
 	
+	/**
+	 * @return la matrice B correspondant à la dispertion entre les clusters
+	 */
 	public int[][] getB(){
 		int[][] B = new int[nbPixel][nbPixel];
 		int[][] M = Matrice.mean(center);
@@ -218,8 +273,27 @@ public class Kmeans {
 		return B;
 	}
 	
-	public int ch() {
+	/**
+	 * @return le paramètre CH caractérisant l'optimalité du nombre de cluster
+	 */
+	public int getCH() {
 		int n = images.size();
 		return Matrice.trace(getB()) * (n - numberCluster) / (Matrice.trace(getW()) * (numberCluster - 1));
+	}
+	
+	/**
+	 * Effectue une reconnaissance de chiffre à l'aide de l'entrainement préalable
+	 * @param list : liste de chiffre à reconnaitre
+	 */
+	public void recognize(List<int[][]> list) {
+		float wellRecognized = 0;
+		for (int i = 0; i < list.size(); i++) {
+			int nbRecognized = reconnaissance(images.get(i));
+			if(nbRecognized == labels[i])
+				wellRecognized++;
+			System.out.println("Nb reconnu " + nbRecognized + "et nb reel " + labels[i]);
+		}
+		System.out.println(wellRecognized / (float)list.size() * 100f + "% de réussite");
+		System.out.println();
 	}
 }
