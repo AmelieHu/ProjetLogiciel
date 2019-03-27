@@ -143,7 +143,7 @@ public class Kmeans {
 
 			//Affichage
 			System.out.print("[");
-			for (int j = 0; j < stats.length; j++) {
+			for (int j = 0; j < 9; j++) {
 				System.out.print(stats[j] + ", ");
 			}
 
@@ -218,6 +218,7 @@ public class Kmeans {
 		return B;
 	}
 	
+
 	public int ch() {
 		int n = images.size();
 		return Matrice.trace(getB()) * (n - numberCluster) / (Matrice.trace(getW()) * (numberCluster - 1));

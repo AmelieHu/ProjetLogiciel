@@ -18,10 +18,10 @@ public class Main {
 		List<int[][]> imageTest = MnistReader.getImages("t10k-images.idx3-ubyte");
 		int nbTesteur = 20;
 
-		double epsilon = 5;
-		int numberCluster = 40;
+		double epsilon = 0;
+		int numberCluster = 20;
 		int imax = 10;
-		int N = 1000;
+		int N = 10000;
 		int nbPixel = 28;
 		
 		List<int[][]> imageReduit = new ArrayList<int[][]>();
