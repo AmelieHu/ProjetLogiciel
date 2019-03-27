@@ -45,4 +45,40 @@ public class Util {
 		}
 		return reducedVector;
 	}
+	
+	/**
+	 * @param vector : vecteur à réduire
+	 * @param number : nombre d'éléments du vecteur final
+	 * @param beginning : début des éléments dans le vecteur initial
+	 * @return
+	 */
+	public static int[] reducedVector(int[] vector, int number, int beginning) {
+		int[] reducedVector = new int[number];
+		for (int i=0; i < number; i++){
+			reducedVector[i] = vector[beginning + i];
+		}
+		return reducedVector;
+	}
+	
+	/**
+	 * initialise un vecteur en mettant tous ses éléments à 0
+	 * @param vector : vecteur à initialiser
+	 */
+	public static void initializeVector(int[] vector) {
+		for (int i = 0; i < vector.length; i++) {
+			vector[i] = 0;
+		}
+	}
+	
+	/**
+	 * Initialise unr ArrayList avec des ArrayList
+	 * @param list : liste à initialiser
+	 * @param N : taille de la liste
+	 */
+	public static void initializeList(ArrayList<ArrayList<Integer>> list, int N) {
+		list.clear();
+		for (int i = 0; i < N; i++) {
+			list.add(new ArrayList<Integer>());
+		}
+	}
 }

@@ -135,8 +135,8 @@ public class Matrice {
 	 * @param M : matrice
 	 * @return : trace de la matrice
 	 */
-	public static int trace(int[][] M){
-		int tr = 0;
+	public static long trace(int[][] M){
+		long tr = 0;
 		for (int i = 0; i < M.length; i++) {
 			tr += M[i][i];
 		}
