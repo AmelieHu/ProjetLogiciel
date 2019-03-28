@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args){
 
-		int numberCluster = 200; //Nombre de cluster
+		int numberCluster = 20; //Nombre de cluster
 		int N = 5000;//Nombre d'image utilisée pour entrainer l'algorithme
 
 
