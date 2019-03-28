@@ -7,14 +7,14 @@ public class Main {
 	public static void main(String[] args){
 
 		int numberCluster = 20; //Nombre de cluster
-		int N = 5000;//Nombre d'image utilisée pour entrainer l'algorithme
+		int N = 5000;//Nombre d'image utilisï¿½e pour entrainer l'algorithme
 
 
 		//initialisation des matrices d'images et de labels
 		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
 		List<int[][]> images = MnistReader.getImages("train-images.idx3-ubyte");
 
-		//Initialisation des listes réduites des images
+		//Initialisation des listes rï¿½duites des images
 		List<int[][]> imagesReduced = new ArrayList<int[][]>();
 		int[] labelsReduced = new int[N];
 		imagesReduced = Util.reduceList(images, N);
@@ -26,12 +26,12 @@ public class Main {
 		//Entrainement de l'algorithme
 		essai.train();
 
-		//Affichage des statistiques de détection
+		//Affichage des statistiques de dï¿½tection
 		essai.statistics(false);
 
 		int sizeToTest = 500;
 
-		//Image à tester
+		//Image ï¿½ tester
 		List<int[][]> imageToTest = new ArrayList<int[][]>();
 		int[] labelsToTest = new int[sizeToTest];
 		imageToTest = Util.reduceList(images, sizeToTest, N);
@@ -46,7 +46,7 @@ public class Main {
 		/*int N = 3000;
 		Kmeans kmean;
 
-		//Initialisation des listes réduites des images
+		//Initialisation des listes rï¿½duites des images
 		List<int[][]> imagesReduced = new ArrayList<int[][]>();
 		int[] labelsReduced = new int[N];
 		imagesReduced = Util.reduceList(images, N);
@@ -54,7 +54,7 @@ public class Main {
 		
 		int sizeToTest = 500;
 		
-		//Image à tester
+		//Image ï¿½ tester
 		List<int[][]> imageToTest = new ArrayList<int[][]>();
 		int[] labelsToTest = new int[sizeToTest];
 		imageToTest = Util.reduceList(images, sizeToTest, N);

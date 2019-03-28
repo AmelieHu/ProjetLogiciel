@@ -10,33 +10,33 @@ public class Kmeans {
 	public int nbPixel;//Nombre de pixels d'une ligne ou colonne de la matrice
 
 	private List<int[][]> images;//Liste des images d'entrainement de l'algorithme
-	private int[] labels;//Chiffre que représentent les images
+	private int[] labels;//Chiffre que reprï¿½sentent les images
 	private int N;//Nombre d'images
 
 	private List<int[][]> lastCenter;//
 	public List<int[][]> center;//Cluster
-	private int[] centerLabels;//Chiffre que représente chaque cluster
+	private int[] centerLabels;//Chiffre que reprï¿½sente chaque cluster
 	private ArrayList<ArrayList<Integer>> classes;//Images que contiennt les cluster
 	private int[] indicesClasses;//Nombre d'image par cluster
 
 
 	public Kmeans(int numberCluster, List<int[][]> images, int[] labels) {
-		//Initialisation de la base de donnée
+		//Initialisation de la base de donnï¿½e
 		this.numberCluster = numberCluster;
 		this.images = images;
 		this.labels = labels;
 		this.nbPixel = images.get(0).length;
 		N = images.size();
 
-		//Création des clusters
+		//Crï¿½ation des clusters
 		center = new ArrayList<int[][]>();
 		lastCenter = new ArrayList<int[][]>();
 
-		//Création de la liste contenant les chiffres détectés des clusters
+		//Crï¿½ation de la liste contenant les chiffres dï¿½tectï¿½s des clusters
 		centerLabels = new int[numberCluster];
-		//Nombre d'éléments par cluster
+		//Nombre d'ï¿½lï¿½ments par cluster
 		indicesClasses = new int[numberCluster];
-		//Indices des éléments appartenant au cluster
+		//Indices des ï¿½lï¿½ments appartenant au cluster
 		classes = new ArrayList<ArrayList<Integer>>(numberCluster);
 
 		//Initialisation des listes de classes et d'indicesClasses
@@ -46,7 +46,7 @@ public class Kmeans {
 
 
 	/**
-	 * Initialise la première liste de centre avec des éléments pris au hasard dans la liste d'images
+	 * Initialise la premiï¿½re liste de centre avec des ï¿½lï¿½ments pris au hasard dans la liste d'images
 	 */
 	public void initializeFirstCenter(){
 		int indice;
@@ -65,7 +65,7 @@ public class Kmeans {
 		for (int[][] matrice : images) {
 			//Indice du cluster qui est le plus proche de l'image
 			int min = 0;
-			//Distance minimale par rapport à ce cluster
+			//Distance minimale par rapport ï¿½ ce cluster
 			double dmin = Matrice.frobeniusNorm(Matrice.minus(matrice,
 					center.get(0)));
 
@@ -77,9 +77,9 @@ public class Kmeans {
 					min = center.indexOf(centre);
 				}
 			}
-			//Ajoute l'image à ce cluster
+			//Ajoute l'image ï¿½ ce cluster
 			classes.get(min).add(images.indexOf(matrice));
-			//Augmente le nombre d'image associé à ce cluster
+			//Augmente le nombre d'image associï¿½ ï¿½ ce cluster
 			indicesClasses[min]++;
 		}
 	}
@@ -96,7 +96,7 @@ public class Kmeans {
 				somme = Matrice.plus(somme,
 						images.get(classes.get(i).get(j)));
 			}
-			//Définie le nouveau cluster comme la moyenne des points qu'il contient
+			//Dï¿½finie le nouveau cluster comme la moyenne des points qu'il contient
 			center.set(i, Matrice.scalarDivision(somme, indicesClasses[i]));
 		}
 	}
@@ -113,7 +113,7 @@ public class Kmeans {
 
 		//Tant que les clusters bougent
 		do{
-			//Distance maximale du mouvement des clusters d'une étape de la boucle à l'autre
+			//Distance maximale du mouvement des clusters d'une ï¿½tape de la boucle ï¿½ l'autre
 			distanceMax = 0;
 
 			//initialise les indicesClasses et les classes avec respectivement un vecteur de 0 et une liste de null
@@ -123,7 +123,7 @@ public class Kmeans {
 			lastCenter.clear();
 			lastCenter.addAll(center); 
 
-			//Définie chaque image à un cluster
+			//Dï¿½finie chaque image ï¿½ un cluster
 			this.searchCenter();
 
 			//Change la position du cluster
@@ -172,7 +172,7 @@ public class Kmeans {
 	}
 
 	/**
-	 * Affiche les statistiques liés aux clusters
+	 * Affiche les statistiques liï¿½s aux clusters
 	 * @param print : affichage 
 	 */
 	public void statistics(boolean print) {
@@ -226,8 +226,8 @@ public class Kmeans {
 	}
 
 	/**
-	 * @param testeur Matrice du nombre à tester
-	 * @return la valeur du nombre détectée correspondant à un cluster
+	 * @param testeur Matrice du nombre ï¿½ tester
+	 * @return la valeur du nombre dï¿½tectï¿½e correspondant ï¿½ un cluster
 	 */
 	public int reconnaissance(int[][] testeur){
 		int min = 0;
@@ -244,7 +244,7 @@ public class Kmeans {
 	}
 
 	/**
-	 * @return la matrice W correspondant à la dispersion au sein des clusters
+	 * @return la matrice W correspondant ï¿½ la dispersion au sein des clusters
 	 */
 	public int[][] getW(){
 		int[][] W = new int[nbPixel][nbPixel];
@@ -264,7 +264,7 @@ public class Kmeans {
 	}
 
 	/**
-	 * @return la matrice B correspondant à la dispertion entre les clusters
+	 * @return la matrice B correspondant ï¿½ la dispertion entre les clusters
 	 */
 	public int[][] getB(){
 		int[][] B = new int[nbPixel][nbPixel];
@@ -277,7 +277,7 @@ public class Kmeans {
 	}
 
 	/**
-	 * @return le paramètre CH caractérisant l'optimalité du nombre de cluster
+	 * @return le paramï¿½tre CH caractï¿½risant l'optimalitï¿½ du nombre de cluster
 	 */
 	public long getCH() {
 		long n = images.size();
@@ -289,8 +289,8 @@ public class Kmeans {
 	}
 
 	/**
-	 * Effectue une reconnaissance de chiffre à l'aide de l'entrainement préalable
-	 * @param list : liste de chiffre à reconnaitre
+	 * Effectue une reconnaissance de chiffre ï¿½ l'aide de l'entrainement prï¿½alable
+	 * @param list : liste de chiffre ï¿½ reconnaitre
 	 */
 	public void recognize(List<int[][]> list) {
 		for (int i = 0; i < list.size(); i++) {
@@ -301,8 +301,8 @@ public class Kmeans {
 	}
 
 	/**
-	 * Calcule le taux de réussite de la reconnaissance
-	 * @param list : liste de nombre à tester
+	 * Calcule le taux de rï¿½ussite de la reconnaissance
+	 * @param list : liste de nombre ï¿½ tester
 	 * @param labelsList : labels des nombres de la liste
 	 */
 	public float recognize(List<int[][]> list, int[] labelsList) {
@@ -313,16 +313,16 @@ public class Kmeans {
 				wellRecognized++;
 			System.out.println("Nb reconnu " + nbRecognized + "et nb reel " + labelsList[i]);
 		}
-		System.out.println(wellRecognized / (float)list.size() * 100f + "% de réussite");
+		System.out.println(wellRecognized / (float)list.size() * 100f + "% de rï¿½ussite");
 		System.out.println();
 		return wellRecognized / (float)list.size() * 100f;
 	}
 
 	/**
-	 * Calcule le taux de réussite de la reconnaissance
-	 * @param list : liste de nombre à tester
+	 * Calcule le taux de rï¿½ussite de la reconnaissance
+	 * @param list : liste de nombre ï¿½ tester
 	 * @param labelsList : labels des nombres de la liste
-	 * @param print : affiche le nombre et ce que la reconnaissance a détecté
+	 * @param print : affiche le nombre et ce que la reconnaissance a dï¿½tectï¿½
 	 */
 	public float[] recognize(List<int[][]> list, int[] labelsList, boolean print) {
 		float[] total = new float[10];
@@ -354,7 +354,7 @@ public class Kmeans {
 		
 		recognized[10] = wellRecognized / (float)list.size() * 100f;
 		
-		System.out.println(recognized[10] + "% de réussite");
+		System.out.println(recognized[10] + "% de rï¿½ussite");
 		System.out.println();
 		return recognized;
 	}
