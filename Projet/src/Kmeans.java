@@ -1,9 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 public class Kmeans {
 	private int numberCluster;
@@ -142,34 +138,6 @@ public class Kmeans {
 		} while(distanceMax != 0);
 	}
 
-	/**
-	 * Calcule le chiffre reconnu par chaque cluster
-	 */
-	public void statistics() {
-		//On calcule les statistiques selon chaque cluster
-		for (int i = 0; i < classes.size(); i++) {
-			float[] stats = new float[10];
-
-			//Calcul du vecteur de statistique
-			for (int j = 0; j < classes.get(i).size(); j++) {
-				stats[labels[classes.get(i).get(j)]] += 1 ;/// (float)classes.get(i).size();
-			}
-
-			//Affichage
-			System.out.print("[");
-			for (int j = 0; j < stats.length; j++) {
-				System.out.print(stats[j] + ", ");
-			}
-
-			int max = 0;
-			for (int j = 1; j < stats.length; j++) {
-				if (stats[max] < stats[j])
-					max = j;
-			}
-			System.out.println("], nombre reconnu : " + max);
-			centerLabels[i] = max;
-		}
-	}
 
 	/**
 	 * Affiche les statistiques li�s aux clusters
@@ -202,6 +170,13 @@ public class Kmeans {
 				Matrice.printMatrix(center.get(i), 4, 50);
 			}
 		}
+	}
+	
+	/**
+	 * Calcule le chiffre reconnu par chaque cluster
+	 */
+	public void statistics() {
+		statistics(false);
 	}
 
 	/**
@@ -285,9 +260,7 @@ public class Kmeans {
 	 */
 	public float[][][] recognize(List<int[][]> list, int[] labelsList) {
 		float[][][] matrix = new float[2][10][10];
-
 		float total = 0;
-		float[] recognized = new float[11];
 
 		for (int i = 0; i < list.size(); i++) {
 			int nbRecognized = tagNumber(list.get(i));

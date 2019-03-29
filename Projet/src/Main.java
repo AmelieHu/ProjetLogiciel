@@ -44,8 +44,8 @@ public class Main {
 			kmean.train();
 
 			kmean.statistics(false);
-			float[] statistics = kmean.recognize(imageToTest, labelsToTest); //Statistique sur la reconnaissance
-			stats[i - numberMinCluster] = statistics[statistics.length - 1]; //Taux de reconnaissance par nombre de cluster
+			float[][][] statistics = kmean.recognize(imageToTest, labelsToTest); //Statistique sur la reconnaissance
+			stats[i - numberMinCluster] = statistics[1][0][0]; //Taux de reconnaissance par nombre de cluster
 			CH[i - numberMinCluster] = kmean.getCH(); //Récupère le CH pour chaque cluster
 		}
 
