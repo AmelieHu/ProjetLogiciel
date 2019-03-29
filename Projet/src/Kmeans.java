@@ -146,7 +146,7 @@ public class Kmeans {
 	 * Calcule le chiffre reconnu par chaque cluster
 	 */
 	public void statistics() {
-		//On calcule les statistiques selon chaque groupe
+		//On calcule les statistiques selon chaque cluster
 		for (int i = 0; i < classes.size(); i++) {
 			float[] stats = new float[10];
 
@@ -191,7 +191,7 @@ public class Kmeans {
 					max = j;
 			}
 			centerLabels[i] = max;
-			
+
 			if(print) {
 				//Affichage
 				System.out.print("[");
@@ -199,30 +199,9 @@ public class Kmeans {
 					System.out.print(stats[j] + ", ");
 				}
 				System.out.println("], nombre reconnu : " + max);
-				printCenter(i);
+				Matrice.printMatrix(center.get(i), 4, 50);
 			}
 		}
-	}
-
-
-	/**
-	 * Affiche le centre h dans la console
-	 * @param h : position du cluster
-	 */
-	public void printCenter(int h){
-		for (int i = 0; i < nbPixel; i++) {
-			for (int j = 0; j < nbPixel; j++) {
-				if(center.get(h)[i][j] > 50){
-					System.out.print(center.get(h)[i][j]);
-					for (int j2 = 0; j2 < (4 - String.valueOf(center.get(h)[i][j]).length()); j2++) {
-						System.out.print(" ");
-					}
-				}else
-					System.out.print("0   ");
-			}
-			System.out.println();
-		}
-		System.out.println();
 	}
 
 	/**
@@ -280,10 +259,10 @@ public class Kmeans {
 	 */
 	public long getCH() {
 		long n = images.size();
-		
+
 		long errorBetween = Matrice.trace(getB()) / ((long)numberCluster - 1);
 		long errorWithin = Matrice.trace(getW()) / (n - (long)numberCluster);
-		
+
 		return errorBetween / errorWithin;
 	}
 
@@ -304,27 +283,28 @@ public class Kmeans {
 	 * @param list : liste de nombre � tester
 	 * @param labelsList : labels des nombres de la liste
 	 */
-	public float[] recognize(List<int[][]> list, int[] labelsList) {
-		float[] total = new float[10];
+	public float[][][] recognize(List<int[][]> list, int[] labelsList) {
+		float[][][] matrix = new float[2][10][10];
+
+		float total = 0;
 		float[] recognized = new float[11];
-		float wellRecognized = 0;
-		
+
 		for (int i = 0; i < list.size(); i++) {
 			int nbRecognized = tagNumber(list.get(i));
-			if(nbRecognized == labelsList[i]) {
-				wellRecognized++;
-				recognized[labelsList[i]]++;
-			}
-			total[labelsList[i]]++;
+			matrix[0][labelsList[i]][nbRecognized]++;
+			total++;
 		}
+
+		int wellRecognized = (int)Matrice.trace(matrix[0]);
 		
-		for (int i = 0; i < recognized.length - 1; i++) {
+		matrix[1][0][0] = wellRecognized / total * 100f;
+		/*for (int i = 0; i < recognized.length - 1; i++) {
 			recognized[i] = recognized[i] / total[i] * 100f;
-		}
-		
-		recognized[10] = wellRecognized / (float)list.size() * 100f;
-		
-		return recognized;
+		}*/
+
+		//recognized[10] = wellRecognized / (float)list.size() * 100f;
+
+		return matrix;
 	}
 
 	/**
@@ -333,40 +313,12 @@ public class Kmeans {
 	 * @param labelsList : labels des nombres de la liste
 	 * @param print : affiche le nombre et ce que la reconnaissance a d�tect�
 	 */
-	public float[] recognize(List<int[][]> list, int[] labelsList, boolean print) {
-		float[] total = new float[10];
-		float[] recognized = new float[11];
-		float wellRecognized = 0;
-		
-		for (int i = 0; i < list.size(); i++) {
-			int nbRecognized = tagNumber(list.get(i));
-			if(nbRecognized == labelsList[i]) {
-				wellRecognized++;
-				recognized[labelsList[i]]++;
-			}
-			total[labelsList[i]]++;
-			if(print) {
-				System.out.println("Nb reconnu " + nbRecognized + " et nb reel " + labelsList[i]);
-			}
-		}
-		
-		if(print)
-			System.out.print("[");
-		
-		for (int i = 0; i < recognized.length - 1; i++) {
-			recognized[i] = recognized[i] / total[i] * 100f;
-			if(print) {
-				System.out.print(recognized[i] + ", ");
-			}
-		}
-		
+	public float[][][] recognize(List<int[][]> list, int[] labelsList, boolean print) {
+		float[][][] recognized = recognize(list, labelsList);
+
 		if(print) {
-			System.out.println("]");
-			System.out.println();			
+			Matrice.printMatrix(recognized[0], 5, 0);
 		}
-		
-		recognized[10] = wellRecognized / (float)list.size() * 100f;
-		
 		return recognized;
 	}
 }

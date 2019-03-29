@@ -27,9 +27,7 @@ public class Matrice {
 		for ( int i = 0 ; i < A.length ; i++ ) {
 			for ( int j = 0 ; j < A[0].length ; j++ ) {
 				S= S + Math.pow(A[i][j],2);
-
 			}
-
 		}
 		return S;
 	}
@@ -142,4 +140,50 @@ public class Matrice {
 		}
 		return tr;
 	}
+	
+	public static float trace(float[][] M){
+		float tr = 0;
+		for (int i = 0; i < M.length; i++) {
+			tr += M[i][i];
+		}
+		return tr;
+	}
+	
+	/**
+	 * Affiche une matrice dans la console
+	 * @param matrix
+	 * @param space : Taille d'une case d'affichage
+	 * @param filterRatio : filtre l'affichage à un certain nombre
+	 */
+	public static void printMatrix(int[][] matrix, int space, int filterRatio) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				if(matrix[i][j] > filterRatio){
+					System.out.print(matrix[i][j]);
+					for (int j2 = 0; j2 < (4 - String.valueOf(matrix[i][j]).length()); j2++) {
+						System.out.print(" ");
+					}
+				}else
+					System.out.print("0   ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	public static void printMatrix(float[][] matrix, int space, int filterRatio) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				if(matrix[i][j] > filterRatio){
+					System.out.print((int)matrix[i][j]);
+					for (int j2 = 0; j2 < (4 - String.valueOf((int)matrix[i][j]).length()); j2++) {
+						System.out.print(" ");
+					}
+				}else
+					System.out.print("0   ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	} 
  }

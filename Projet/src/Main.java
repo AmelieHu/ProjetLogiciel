@@ -10,8 +10,8 @@ public class Main {
 		int[] labels = MnistReader.getLabels("train-labels.idx1-ubyte");
 		List<int[][]> images = MnistReader.getImages("train-images.idx3-ubyte");
 
-		testNumberCluster(images, labels, 10000, 10000, 10, 200);
-		//trainAndTest(images, labels, 5000, 5000, 50, true);
+		//testNumberCluster(images, labels, 10000, 10000, 10, 200);
+		trainAndTest(images, labels, 5000, 5000, 50, true);
 
 		
 
@@ -90,11 +90,11 @@ public class Main {
 
 
 		//Reconnaissance d'une liste de nombres manuscrits
-		float[] statistics = essai.recognize(imageToTest, labelsToTest, print);
+		float[][][] statistics = essai.recognize(imageToTest, labelsToTest, print);
 
 		//Affichage des stastiques générales
 		System.out.println();
-		System.out.println("Pourcentage de réussite de détection : " + statistics[statistics.length - 1]);
+		System.out.println("Pourcentage de réussite de détection : " + statistics[1][0][0]);
 		System.out.println("Score de Calinski Harabasz : " + essai.getCH());
 
 
