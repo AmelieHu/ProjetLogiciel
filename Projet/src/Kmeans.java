@@ -229,7 +229,7 @@ public class Kmeans {
 	 * @param testeur Matrice du nombre � tester
 	 * @return la valeur du nombre d�tect�e correspondant � un cluster
 	 */
-	public int reconnaissance(int[][] testeur){
+	public int tagNumber(int[][] testeur){
 		int min = 0;
 		double dmin = Matrice.frobeniusNorm(Matrice.minus(testeur, center.get(0)));
 		for (int[][] centre : center) {
@@ -257,7 +257,6 @@ public class Kmeans {
 				element = images.get(classes.get(i).get(j)); 
 				M = Matrice.multiplication(Matrice.minus(element, mean),Matrice.transpose(Matrice.minus(element, mean)));
 				W = Matrice.plus(M, W);
-
 			}
 		}
 		return W;
@@ -294,7 +293,7 @@ public class Kmeans {
 	 */
 	public void recognize(List<int[][]> list) {
 		for (int i = 0; i < list.size(); i++) {
-			int nbRecognized = reconnaissance(list.get(i));
+			int nbRecognized = tagNumber(list.get(i));
 			System.out.println("Nb reconnu " + nbRecognized);
 		}
 		System.out.println();
@@ -305,17 +304,27 @@ public class Kmeans {
 	 * @param list : liste de nombre � tester
 	 * @param labelsList : labels des nombres de la liste
 	 */
-	public float recognize(List<int[][]> list, int[] labelsList) {
+	public float[] recognize(List<int[][]> list, int[] labelsList) {
+		float[] total = new float[10];
+		float[] recognized = new float[11];
 		float wellRecognized = 0;
+		
 		for (int i = 0; i < list.size(); i++) {
-			int nbRecognized = reconnaissance(list.get(i));
-			if(nbRecognized == labelsList[i])
+			int nbRecognized = tagNumber(list.get(i));
+			if(nbRecognized == labelsList[i]) {
 				wellRecognized++;
-			System.out.println("Nb reconnu " + nbRecognized + "et nb reel " + labelsList[i]);
+				recognized[labelsList[i]]++;
+			}
+			total[labelsList[i]]++;
 		}
-		System.out.println(wellRecognized / (float)list.size() * 100f + "% de r�ussite");
-		System.out.println();
-		return wellRecognized / (float)list.size() * 100f;
+		
+		for (int i = 0; i < recognized.length - 1; i++) {
+			recognized[i] = recognized[i] / total[i] * 100f;
+		}
+		
+		recognized[10] = wellRecognized / (float)list.size() * 100f;
+		
+		return recognized;
 	}
 
 	/**
@@ -327,20 +336,22 @@ public class Kmeans {
 	public float[] recognize(List<int[][]> list, int[] labelsList, boolean print) {
 		float[] total = new float[10];
 		float[] recognized = new float[11];
-		
 		float wellRecognized = 0;
+		
 		for (int i = 0; i < list.size(); i++) {
-			int nbRecognized = reconnaissance(list.get(i));
+			int nbRecognized = tagNumber(list.get(i));
 			if(nbRecognized == labelsList[i]) {
 				wellRecognized++;
 				recognized[labelsList[i]]++;
 			}
 			total[labelsList[i]]++;
 			if(print) {
-				System.out.println("Nb reconnu " + nbRecognized + "et nb reel " + labelsList[i]);
-				System.out.print("[");
+				System.out.println("Nb reconnu " + nbRecognized + " et nb reel " + labelsList[i]);
 			}
 		}
+		
+		if(print)
+			System.out.print("[");
 		
 		for (int i = 0; i < recognized.length - 1; i++) {
 			recognized[i] = recognized[i] / total[i] * 100f;
@@ -349,13 +360,13 @@ public class Kmeans {
 			}
 		}
 		
-		if(print)
+		if(print) {
 			System.out.println("]");
+			System.out.println();			
+		}
 		
 		recognized[10] = wellRecognized / (float)list.size() * 100f;
 		
-		System.out.println(recognized[10] + "% de r�ussite");
-		System.out.println();
 		return recognized;
 	}
 }
