@@ -24,11 +24,13 @@ public class Matrice {
 	 */
 	public static double frobeniusNorm (int[][] A){
 		double S = 0;
+
 		for ( int i = 0 ; i < A.length ; i++ ) {
 			for ( int j = 0 ; j < A[0].length ; j++ ) {
 				S= S + Math.pow(A[i][j],2);
 			}
 		}
+
 		return S;
 	}
 
@@ -39,11 +41,10 @@ public class Matrice {
 	 */
 	public static int[][] plus(int[][]m1,int[][] m2 ) {
 		int[][] ms = new int[m1.length][m1[0].length ];
+
 		for ( int i = 0 ; i < m1.length ; i++ ) {
-			for ( int j = 0 ; j < m1[0].length ; j++ ) {
-
-				ms[i][j] = m1[i][j] + m2[i][j]; } 
-
+			for ( int j = 0 ; j < m1[0].length ; j++ )
+				ms[i][j] = m1[i][j] + m2[i][j];
 		}
 
 		return ms;
@@ -56,30 +57,32 @@ public class Matrice {
 	 */
 	public static int[][] scalarDivision(int[][] A , int N){
 		if (N != 0){
-
 			for ( int i = 0 ; i < A.length ; i++ ) {
 				for ( int j = 0 ; j < A[0].length ; j++ ) {
 					A[i][j] = A[i][j]/N;
 				}
 			}
 		}
+
 		return A;
 	}
-	
+
 	/**
 	 * @param M : matrice
-	 * @return : transposée de la matrice
+	 * @return : transposee de la matrice
 	 */
 	public static int[][] transpose(int[][] M){
 		int[][] Mt = new int [M.length][M[0].length];
+
 		for (int i = 0; i < M.length; i++) {
 			for (int j = 0; j < M[0].length; j++) {
 				Mt[i][j] = M[j][i]; 
 			}
 		}
+
 		return Mt;
 	}
-	
+
 	/**
 	 * @param m1 : matrice 1
 	 * @param m2 : matrice 2
@@ -89,28 +92,31 @@ public class Matrice {
 		int l= m1.length;
 		int c = m1[0].length;
 		int[][] produit = new int[l][c];
+
 		for (int row =0; row <l;row++){
 			for (int col =0; col<c;col ++){
 				for(int i = 0; i < m1.length; i++)
-				produit[row][col]+= m1[row][i] *m2[i][col];
-						}
+					produit[row][col]+= m1[row][i] *m2[i][col];
+			}
 		}
+
 		return produit; 
 	}
-	
+
 	/**
 	 * @param list
 	 * @return valeur moyenne de la liste
 	 */
 	public static int[][] mean(List<int[][]> list){
 		int[][] mean = new int[list.get(0).length][list.get(0)[0].length];
+
 		for (int i = 0; i < list.size(); i++) {
 			mean = plus(list.get(i), mean);
 		}
-		
+
 		return scalarDivision(mean, list.size());
 	}
-	
+
 	/**
 	 * Calcule la multiplication d'une matrice et d'un sclaire
 	 * @param scalar : scalaire
@@ -118,42 +124,48 @@ public class Matrice {
 	 * @return : produit
 	 */
 	public static int[][] scalarMultiplication(int scalar, int[][] M){
-		
 		int[][] res = new int[M.length][M[0].length];
 		for (int i = 0; i < M.length; i++) {
 			for (int j = 0; j < M[0].length; j++) {
 				res[i][j] = M[i][j] * scalar;
 			}
 		}
-		
+
 		return res;
 	}
-	
+
 	/**
 	 * @param M : matrice
 	 * @return : trace de la matrice
 	 */
 	public static long trace(int[][] M){
 		long tr = 0;
+
 		for (int i = 0; i < M.length; i++) {
 			tr += M[i][i];
 		}
+
 		return tr;
 	}
-	
+
+	/**
+	 * @param M : matrice
+	 * @return : trace de la matrice
+	 */
 	public static float trace(float[][] M){
 		float tr = 0;
+
 		for (int i = 0; i < M.length; i++) {
 			tr += M[i][i];
 		}
 		return tr;
 	}
-	
+
 	/**
 	 * Affiche une matrice dans la console
-	 * @param matrix
-	 * @param space : Taille d'une case d'affichage
-	 * @param filterRatio : filtre l'affichage à un certain nombre
+	 * @param matrix : matrice à afficher
+	 * @param space : taille de chaque "case" de la matrice
+	 * @param filterRatio : nombre à partir du quel ils seront remplacés par des 0 lors de l'affichage
 	 */
 	public static void printMatrix(int[][] matrix, int space, int filterRatio) {
 		for (int i = 0; i < matrix.length; i++) {
@@ -170,7 +182,13 @@ public class Matrice {
 		}
 		System.out.println();
 	}
-	
+
+	/**
+	 * Affiche une matrice dans la console
+	 * @param matrix : matrice à afficher
+	 * @param space : taille de chaque "case" de la matrice
+	 * @param filterRatio : nombre à partir du quel ils seront remplacés par des 0 lors de l'affichage
+	 */
 	public static void printMatrix(float[][] matrix, int space, int filterRatio) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
@@ -186,4 +204,4 @@ public class Matrice {
 		}
 		System.out.println();
 	} 
- }
+}

@@ -24,15 +24,15 @@ public class Kmeans {
 		this.nbPixel = images.get(0).length;
 		N = images.size();
 
-		//Cr�ation des clusters
+		//Creation des clusters
 		center = new ArrayList<int[][]>();
 		lastCenter = new ArrayList<int[][]>();
 
-		//Cr�ation de la liste contenant les chiffres d�tect�s des clusters
+		//Creation de la liste contenant les chiffres d�tect�s des clusters
 		centerLabels = new int[numberCluster];
-		//Nombre d'�l�ments par cluster
+		//Nombre d'elements par cluster
 		indicesClasses = new int[numberCluster];
-		//Indices des �l�ments appartenant au cluster
+		//Indices des elements appartenant au cluster
 		classes = new ArrayList<ArrayList<Integer>>(numberCluster);
 
 		//Initialisation des listes de classes et d'indicesClasses
@@ -42,7 +42,7 @@ public class Kmeans {
 
 
 	/**
-	 * Initialise la premi�re liste de centre avec des �l�ments pris au hasard dans la liste d'images
+	 * Initialise la premiere liste de centre avec des elements pris au hasard dans la liste d'images
 	 */
 	public void initializeFirstCenter(){
 		int indice;
@@ -75,7 +75,7 @@ public class Kmeans {
 			}
 			//Ajoute l'image � ce cluster
 			classes.get(min).add(images.indexOf(matrice));
-			//Augmente le nombre d'image associ� � ce cluster
+			//Augmente le nombre d'image associee a ce cluster
 			indicesClasses[min]++;
 		}
 	}
@@ -92,7 +92,7 @@ public class Kmeans {
 				somme = Matrice.plus(somme,
 						images.get(classes.get(i).get(j)));
 			}
-			//D�finie le nouveau cluster comme la moyenne des points qu'il contient
+			//Definie le nouveau cluster comme la moyenne des points qu'il contient
 			center.set(i, Matrice.scalarDivision(somme, indicesClasses[i]));
 		}
 	}
@@ -109,7 +109,7 @@ public class Kmeans {
 
 		//Tant que les clusters bougent
 		do{
-			//Distance maximale du mouvement des clusters d'une �tape de la boucle � l'autre
+			//Distance maximale du mouvement des clusters d'une etape de la boucle a l'autre
 			distanceMax = 0;
 
 			//initialise les indicesClasses et les classes avec respectivement un vecteur de 0 et une liste de null
@@ -119,7 +119,7 @@ public class Kmeans {
 			lastCenter.clear();
 			lastCenter.addAll(center); 
 
-			//D�finie chaque image � un cluster
+			//Definie chaque image a un cluster
 			this.searchCenter();
 
 			//Change la position du cluster
@@ -133,8 +133,6 @@ public class Kmeans {
 					distanceMax = dx;
 				}
 			}
-			System.out.println(distanceMax);
-
 		} while(distanceMax != 0);
 	}
 
@@ -150,14 +148,16 @@ public class Kmeans {
 
 			//Calcul du vecteur de statistique
 			for (int j = 0; j < classes.get(i).size(); j++) {
-				stats[labels[classes.get(i).get(j)]] += 1 ;/// (float)classes.get(i).size();
+				stats[labels[classes.get(i).get(j)]] += 1 ;
 			}
 
 			int max = 0;
+			
 			for (int j = 1; j < stats.length; j++) {
 				if (stats[max] < stats[j])
 					max = j;
 			}
+			
 			centerLabels[i] = max;
 
 			if(print) {
@@ -180,12 +180,13 @@ public class Kmeans {
 	}
 
 	/**
-	 * @param testeur Matrice du nombre � tester
-	 * @return la valeur du nombre d�tect�e correspondant � un cluster
+	 * @param testeur Matrice du nombre a tester
+	 * @return la valeur du nombre detectee correspondant a un cluster
 	 */
 	public int tagNumber(int[][] testeur){
 		int min = 0;
 		double dmin = Matrice.frobeniusNorm(Matrice.minus(testeur, center.get(0)));
+		
 		for (int[][] centre : center) {
 			int[][] x = Matrice.minus(testeur, centre);
 			double dx = Matrice.frobeniusNorm(x);
@@ -194,18 +195,21 @@ public class Kmeans {
 				min = center.indexOf(centre);
 			}
 		}
+		
 		return centerLabels[min];
 	}
 
 	/**
-	 * @return la matrice W correspondant � la dispersion au sein des clusters
+	 * @return la matrice W correspondant a la dispersion au sein des clusters
 	 */
 	public int[][] getW(){
 		int[][] W = new int[nbPixel][nbPixel];
 		int[][] M = new int[nbPixel][nbPixel];
+		
 		for (int i = 0; i < numberCluster; i++) {
 			int[][] mean = new int[nbPixel][nbPixel];
 			mean = center.get(i);
+			
 			for (int j = 0; j < indicesClasses[i]; j++) {
 				int[][] element = new int[nbPixel][nbPixel];
 				element = images.get(classes.get(i).get(j)); 
@@ -213,28 +217,32 @@ public class Kmeans {
 				W = Matrice.plus(M, W);
 			}
 		}
+		
 		return W;
 	}
 
 	/**
-	 * @return la matrice B correspondant � la dispertion entre les clusters
+	 * @return la matrice B correspondant a la dispertion entre les clusters
 	 */
 	public int[][] getB(){
+		
 		int[][] B = new int[nbPixel][nbPixel];
 		int[][] M = Matrice.mean(center);
+		
 		for (int i = 0; i < numberCluster; i++) {
 			int[][] X = Matrice.minus(center.get(i), M);
 			B = Matrice.plus(B, Matrice.scalarMultiplication(indicesClasses[i], Matrice.multiplication(X, Matrice.transpose(X))));
 		}
+		
 		return B;
 	}
 
 	/**
-	 * @return le param�tre CH caract�risant l'optimalit� du nombre de cluster
+	 * @return le param�tre CH caracterisant l'optimalite du nombre de cluster
 	 */
 	public long getCH() {
+		
 		long n = images.size();
-
 		long errorBetween = Matrice.trace(getB()) / ((long)numberCluster - 1);
 		long errorWithin = Matrice.trace(getW()) / (n - (long)numberCluster);
 
@@ -246,45 +254,39 @@ public class Kmeans {
 	 * @param list : liste de chiffre � reconnaitre
 	 */
 	public void recognize(List<int[][]> list) {
+		
 		for (int i = 0; i < list.size(); i++) {
 			int nbRecognized = tagNumber(list.get(i));
 			System.out.println("Nb reconnu " + nbRecognized);
 		}
+		
 		System.out.println();
 	}
 
 	/**
-	 * Calcule le taux de r�ussite de la reconnaissance
-	 * @param list : liste de nombre � tester
+	 * Calcule le taux de reussite de la reconnaissance
+	 * @param list : liste de nombre a tester
 	 * @param labelsList : labels des nombres de la liste
 	 */
 	public float[][][] recognize(List<int[][]> list, int[] labelsList) {
 		float[][][] matrix = new float[2][10][10];
-		float total = 0;
 
 		for (int i = 0; i < list.size(); i++) {
 			int nbRecognized = tagNumber(list.get(i));
 			matrix[0][labelsList[i]][nbRecognized]++;
-			total++;
 		}
 
 		int wellRecognized = (int)Matrice.trace(matrix[0]);
-		
-		matrix[1][0][0] = wellRecognized / total * 100f;
-		/*for (int i = 0; i < recognized.length - 1; i++) {
-			recognized[i] = recognized[i] / total[i] * 100f;
-		}*/
-
-		//recognized[10] = wellRecognized / (float)list.size() * 100f;
+		matrix[1][0][0] = (float)wellRecognized / (float)list.size() * 100f;
 
 		return matrix;
 	}
 
 	/**
-	 * Calcule le taux de r�ussite de la reconnaissance
-	 * @param list : liste de nombre � tester
+	 * Calcule le taux de reussite de la reconnaissance
+	 * @param list : liste de nombre a tester
 	 * @param labelsList : labels des nombres de la liste
-	 * @param print : affiche le nombre et ce que la reconnaissance a d�tect�
+	 * @param print : affiche le nombre et ce que la reconnaissance a detecte
 	 */
 	public float[][][] recognize(List<int[][]> list, int[] labelsList, boolean print) {
 		float[][][] recognized = recognize(list, labelsList);
